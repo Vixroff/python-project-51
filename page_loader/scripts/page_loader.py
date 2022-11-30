@@ -1,5 +1,5 @@
 from page_loader import download
-from page_loader.cli_parser import parse_args
+from page_loader.cli import parse_args
 
 
 def main():

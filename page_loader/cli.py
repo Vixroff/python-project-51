@@ -2,6 +2,7 @@ import argparse
 
 
 def parse_args():
+    """CLI arguments parser"""
     parser = argparse.ArgumentParser(
         prog="page-loader",
         description="Download HTML page from a link and save it into entered directory")
