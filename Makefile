@@ -10,5 +10,8 @@ lint:
 test:
 	poetry run pytest
 
+test-coverage:
+	poetry run pytest --cov=gendiff --cov-report xml
+
 run:
-	poetry run page-loader https://www.google.com
+	poetry run page-loader https://www.meplant.ru
