@@ -1,3 +1,6 @@
+install:
+	poetry install
+
 build:
 	poetry build
 
@@ -11,7 +14,7 @@ test:
 	poetry run pytest
 
 test-coverage:
-	poetry run pytest --cov=gendiff --cov-report xml
+	poetry run pytest --cov=page_loader --cov-report xml
 
 run:
-	poetry run page-loader https://www.meplant.ru
+	poetry run page-loader https://meplant.ru

@@ -1,5 +1,9 @@
 import os
 import tempfile
+import pytest
+
+
+import requests
 
 
 from page_loader.download import download
@@ -31,3 +35,13 @@ def test_download(requests_mock):
         assert os.path.exists(source_path)
         assert read(source_path, 'rb') == read('tests/fixtures/files/image.png', 'rb')
         assert read(actual_output) == expected_output_data
+
+
+@pytest.mark.parametrize('exception', [
+    requests.HTTPError, requests.ConnectionError,
+    requests.URLRequired, requests.TooManyRedirects, requests.Timeout,
+    PermissionError, FileNotFoundError])
+def test_download_exceptions(exception, tmpdir, requests_mock):
+    with pytest.raises(exception):
+        requests_mock.get(URL, exc=exception)
+        download(tmpdir, URL)

@@ -2,8 +2,9 @@ import os
 from urllib.parse import urlparse, urljoin
 
 
+from page_loader.log import logger
 from page_loader.tools.parser import parse
-from page_loader.tools.utils import get_folder_name, get_source_filename
+from page_loader.tools.names import get_folder_name, get_source_filename
 
 
 SOURCES_ATR = {
@@ -52,8 +53,10 @@ def download_sources(soup, url, directory):
         atr = SOURCES_ATR.get(source.name)
         link = source.get(atr)
         if not link:
+            logger.warning(f"No link here {link}")
             continue
         elif not check_link(link, url) is True:
+            logger.warning(f"Link out of domain {link}")
             continue
         else:
             full_link = get_full_link(link, url)
