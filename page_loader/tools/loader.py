@@ -2,7 +2,12 @@ import os
 from urllib.parse import urlparse, urljoin
 
 
+from progress.bar import IncrementalBar
+
+
 from page_loader.log import logger
+
+
 from page_loader.tools.parser import parse
 from page_loader.tools.names import get_folder_name, get_source_filename
 
@@ -48,8 +53,10 @@ def save_source(source, link, folder_path):
 
 def download_sources(soup, url, directory):
     sources = soup.find_all(SOURCES_ATR.keys())
+    bar = IncrementalBar('Loading sources', max=len(sources), suffix='%(percent).1f%% - %(max)d sources')
     folder_path = create_source_folder(directory, url)
     for source in sources:
+        bar.next()
         atr = SOURCES_ATR.get(source.name)
         link = source.get(atr)
         if not link:
@@ -63,4 +70,5 @@ def download_sources(soup, url, directory):
             content = parse(full_link)
             path_to_source = save_source(content, full_link, folder_path)
             source[atr] = os.path.relpath(path_to_source, directory)
+    bar.finish()
     return soup
