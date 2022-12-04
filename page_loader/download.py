@@ -14,11 +14,11 @@ from page_loader.tools.names import get_html_filename
 def get_path_to_output(output):
     if output == "current":
         path = os.getcwd()
-    elif os.path.exists(output):
+    elif os.path.exists(output) and os.access(output, os.W_OK):
         path = output
     else:
         logger.error("Not found directory like that")
-        sys.exit()
+        raise IOError(f'Wrong directory {output}')
     return path
 
 
