@@ -60,10 +60,10 @@ def download_sources(soup, url, directory):
         atr = SOURCES_ATR.get(source.name)
         link = source.get(atr)
         if not link:
-            logger.warning(f"No link here {link}")
+            logger.warning(f"Link doesn't exist: {atr}")
             continue
         elif not check_link(link, url) is True:
-            logger.warning(f"Link out of domain {link}")
+            logger.warning(f"Link out of local domain: {atr}: {link}")
             continue
         else:
             full_link = get_full_link(link, url)

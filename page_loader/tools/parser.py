@@ -11,8 +11,8 @@ def parse(url):
     try:
         response = requests.get(url, timeout=3)
         response.raise_for_status()
-        logger.info(f'GET {url} data')
+        logger.info(f'GET DATA: {url}')
         return response.content
-    except (requests.RequestException) as e:
-        logger.error(f'Unable to access the network ERROR: {e}')
-        raise e
+    except requests.RequestException as e:
+        logger.error(f'ERROR: {e} - Unable to access the network: {url}')
+        raise e(f'ERROR: {e} - Unable to access the network: {url}')

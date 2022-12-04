@@ -5,7 +5,7 @@ import sys
 logger = logging.getLogger('logger')
 logger.setLevel(logging.DEBUG)
 
-handler = logging.FileHandler('logfile.log', mode='a', encoding='utf-8')
+handler = logging.FileHandler('logfile.log', mode='w', encoding='utf-8')
 handler.setLevel(logging.DEBUG)
 handler_err = logging.StreamHandler(stream=sys.stderr)
 handler_err.setLevel(logging.ERROR)
