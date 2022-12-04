@@ -9,7 +9,7 @@ from page_loader.log import logger
 
 
 from page_loader.tools.parser import parse
-from page_loader.tools.names import get_folder_name, get_source_filename
+from page_loader.tools.names import get_folder_name, get_filename
 
 
 SOURCES_ATR = {
@@ -35,16 +35,8 @@ def check_link(link, url):
     return not link_netloc or link_netloc == url_netloc
 
 
-def get_full_link(link, url):
-    scheme = urlparse(url).scheme
-    netloc = urlparse(url).netloc
-    path = urlparse(link).path
-    link = urljoin(f"{scheme}://{netloc}", path)
-    return link
-
-
 def save_source(source, link, folder_path):
-    source_filename = get_source_filename(link)
+    source_filename = get_filename(link)
     path_to_source_file = os.path.join(folder_path, source_filename)
     with open(path_to_source_file, 'wb') as w:
         w.write(source)
@@ -60,13 +52,13 @@ def download_sources(soup, url, directory):
         atr = SOURCES_ATR.get(source.name)
         link = source.get(atr)
         if not link:
-            logger.warning(f"No link here {link}")
+            logger.warning(f"Link doesn't exist: {atr}")
             continue
         elif not check_link(link, url) is True:
-            logger.warning(f"Link out of domain {link}")
+            logger.warning(f"Link out of local domain: {atr}: {link}")
             continue
         else:
-            full_link = get_full_link(link, url)
+            full_link = urljoin(url, link)
             content = parse(full_link)
             path_to_source = save_source(content, full_link, folder_path)
             source[atr] = os.path.relpath(path_to_source, directory)

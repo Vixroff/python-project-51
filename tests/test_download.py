@@ -22,13 +22,13 @@ def read(path, mode='r'):
 def test_download(requests_mock):
     """
     Test the main function 'download' of 'page-loader' library.
-    It checks content and file's existing at specified directory 
+    It checks content and file's existing at specified directory
 
     """
     requests_mock.get(URL, text=read('tests/fixtures/original.html'))
     requests_mock.get(SRC, content=read('tests/fixtures/files/image.png', 'rb'))
     with tempfile.TemporaryDirectory() as tmpdir:
-        actual_output = download(tmpdir, URL)
+        actual_output = download(URL, tmpdir)
         expected_output_data = read('tests/fixtures/expected.html')
         source_path = os.path.join(tmpdir, 'ru-hexlet-io-courses_files/ru-hexlet-io-assets-professions-nodejs.png')
         assert os.path.exists(actual_output)
@@ -44,4 +44,4 @@ def test_download(requests_mock):
 def test_download_exceptions(exception, tmpdir, requests_mock):
     with pytest.raises(exception):
         requests_mock.get(URL, exc=exception)
-        download(tmpdir, URL)
+        download(URL, tmpdir)

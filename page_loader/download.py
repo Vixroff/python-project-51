@@ -1,5 +1,4 @@
 import os
-import sys
 from bs4 import BeautifulSoup
 
 
@@ -8,7 +7,7 @@ from page_loader.log import logger
 
 from page_loader.tools.parser import parse
 from page_loader.tools.loader import download_sources
-from page_loader.tools.names import get_html_filename
+from page_loader.tools.names import get_filename
 
 
 def get_path_to_output(output):
@@ -17,13 +16,13 @@ def get_path_to_output(output):
     elif os.path.exists(output) and os.access(output, os.W_OK):
         path = output
     else:
-        logger.error("Not found directory like that")
-        raise IOError(f'Wrong directory {output}')
+        logger.error(f"Access error to output/Wrong output: {output}")
+        raise IOError(f"Access error to output/Wrong output: {output}")
     return path
 
 
 def save_html(soup, url, directory):
-    html_filename = get_html_filename(url)
+    html_filename = get_filename(url)
     path_to_html = os.path.join(directory, html_filename)
     soup = soup.prettify()
     with open(path_to_html, 'w') as f:
@@ -31,7 +30,7 @@ def save_html(soup, url, directory):
     return path_to_html
 
 
-def download(output, url):
+def download(url, output):
     logger.info('START')
     path_to_output = get_path_to_output(output)
     html = parse(url)
